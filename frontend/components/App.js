@@ -26,11 +26,13 @@ function App() {
   const history = useHistory();
 
   const [email, setEmail] = useState("");
+  const [token, setToken] = useState(undefined);
+  
 
   //hook for token verification and auto login when rendering app
 
   useEffect(() => {
-    const token = localStorage.getItem("jwt");
+    setToken(localStorage.getItem("jwt"));
     if (token) {
       auth.checkToken(token)
         .then((res) => {
@@ -69,8 +71,9 @@ function App() {
     auth.login(email, password)
       .then((res => {
         if (res.token) {
+          setToken(res.token);
           toggleInfoTooltipSuccessLoginState();
-          localStorage.setItem("jwt", res.token);
+          localStorage.setItem("jwt", token);
           localStorage.setItem("email", res.email);
           setIsLoggedIn(true);
           setEmail(email);
