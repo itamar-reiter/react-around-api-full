@@ -1,6 +1,7 @@
 const Users = require('../models/user');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken'); 
+const jwt = require('jsonwebtoken');
+const {NODE_ENV, JWT_SECRET} = process.env;
 const {
   defaultError, INVALID_DATA_ERROR_CODE, NOT_FOUND_ERROR_CODE, userUpdateError,
 } = require('../utils/errors');
@@ -10,10 +11,10 @@ const login = (req, res) => {
   Users.findUserByCredentials(email, password)
     .then(user => {
       const token = jwt.sign({ _id: user._id },
-        'not-so-secret-string');
+        NODE_ENV === 'production' ? JWT_SECRET : 'not-so-secret-string');
         res.send({token});
     })
-    //TODO handle the catch errors
+    //TODO handle the catch errors , maybe it was handled at findByCredentials
     .catch(err => res.status(401).send({ message: err.message }));
 }
 
@@ -100,5 +101,5 @@ const createUser = (req, res) =>
       }
     });
 module.exports = {
-  getUsers, getUserById, createUser, updateProfile, updateAvatar,
+  login, getUsers, getUserById, createUser, updateProfile, updateAvatar,
 };

@@ -51,13 +51,13 @@ userSchema.statics.findUserByCredentials = function findUserByCredentials(email,
         return Promise.reject(new Error('Email or Password are incorrect'));
       }
       return bcrypt.compare(password, user.password)
-    })
-    .then(matched => {
-      if (!matched) {
-          return Promise.reject(new Error('bad cred'));
-      }
-      return user;
-   });
+        .then(matched => {
+          if (!matched) {
+            return Promise.reject(new Error('bad cred'));
+          }
+          return user;
+        })
+    });
 }
 
 module.exports = model('user', userSchema);
