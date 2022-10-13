@@ -1,4 +1,5 @@
 const Users = require('../models/user');
+const bcrypt = require('bcryptjs');
 const {
   defaultError, INVALID_DATA_ERROR_CODE, NOT_FOUND_ERROR_CODE, userUpdateError,
 } = require('../utils/errors');
@@ -69,19 +70,22 @@ const updateAvatar = (req, res) => {
     });
 };
 
-const createUser = (req, res) => Users.create({ ...req.body })
-  .then((user) => {
-    res.status(200).send(user);
-  })
-  .catch((error) => {
-    if (error.name === 'ValidationError') {
-      res.status(INVALID_DATA_ERROR_CODE).send({
-        message: 'Invalid avatar url or an item is missing.',
-      });
-    } else {
-      defaultError(res);
-    }
-  });
+const createUser = (req, res) =>
+  bcrypt.hash(req.body.password, 10)
+    .then(hash => Users.create({ password: hash, email: req.body.email }))
+    //TODO returning the user without the hashed password
+    .then((user) => {
+      res.status(200).send(user);
+    })
+    .catch((error) => {
+      if (error.name === 'ValidationError') {
+        res.status(INVALID_DATA_ERROR_CODE).send({
+          message: 'Invalid avatar url or an item is missing.',
+        });
+      } else {
+        defaultError(res);
+      }
+    });
 module.exports = {
   getUsers, getUserById, createUser, updateProfile, updateAvatar,
 };
