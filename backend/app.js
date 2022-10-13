@@ -20,26 +20,18 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: '62b8498215fdd672ace5a4ad', // paste the _id of the test user created in the previous step
-  };
-
-  next();
-});
-
 //login
 app.post('/signin', login);
 
 //signup
 app.post('/signup', createUser);
 
+//use auth middleware only for protected routes
+app.use(auth);
+
 //routes for users and cards
 app.use('/', usersRouter);
 app.use('/', errorRouter);
-
-//use auth middleware only for protected routes
-app.use(auth);
 
 // cards route for the specific user
 app.use('/', cardsRouter);
