@@ -4,8 +4,8 @@ const mongoose = require('mongoose');
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
 const errorRouter = require('./routes/userError');
-// listen to port 3001
-const { PORT = 3001 } = process.env;
+// listen to port 3000
+const { PORT = 3000 } = process.env;
 
 mongoose.connect('mongodb://localhost:27017/aroundb', {
   useNewUrlParser: true,
