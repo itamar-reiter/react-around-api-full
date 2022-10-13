@@ -1,6 +1,7 @@
 const { Schema, model } = require('mongoose');
 const { urlRegex } = require('../utils/regex');
 const validator = require('validator');
+const bcrypt = require('bcryptjs');
 
 const userSchema = new Schema({
   name: {
@@ -42,5 +43,21 @@ const userSchema = new Schema({
     minlength: 8,
   }
 });
+
+userSchema.statics.findUserByCredentials = function findUserByCredentials(email, password) {
+  return this.findOne({ email: email })
+    .then(user => {
+      if (!user) {
+        return Promise.reject(new Error('Email or Password are incorrect'));
+      }
+      return bcrypt.compare(password, user.password)
+    })
+    .then(matched => {
+      if (!matched) {
+          return Promise.reject(new Error('bad cred'));
+      }
+      return user;
+   });
+}
 
 module.exports = model('user', userSchema);

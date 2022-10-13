@@ -1,8 +1,21 @@
 const Users = require('../models/user');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken'); 
 const {
   defaultError, INVALID_DATA_ERROR_CODE, NOT_FOUND_ERROR_CODE, userUpdateError,
 } = require('../utils/errors');
+
+const login = (req, res) => {
+  const { email, password } = req.body;
+  Users.findUserByCredentials(email, password)
+    .then(user => {
+      const token = jwt.sign({ _id: user._id },
+        'not-so-secret-string');
+        res.send({token});
+    })
+    //TODO handle the catch errors
+    .catch(err => res.status(401).send({ message: err.message }));
+}
 
 const getUsers = (req, res) => Users.find({})
   .then((users) => res.status(200).send(users))
