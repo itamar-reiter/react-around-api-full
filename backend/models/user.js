@@ -40,12 +40,13 @@ const userSchema = new Schema({
   password: {
     type: String,
     required: true,
+    select: false,
     minlength: 8,
   }
 });
 
 userSchema.statics.findUserByCredentials = function findUserByCredentials(email, password) {
-  return this.findOne({ email: email })
+  return this.findOne({ email: email }).select('+password')
     .then(user => {
       if (!user) {
         return Promise.reject(new Error('Email or Password are incorrect'));

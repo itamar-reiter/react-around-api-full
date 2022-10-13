@@ -30,6 +30,7 @@ app.post('/signup', createUser);
 app.use(auth);
 
 //routes for users and cards
+//TODO prevent user from editing users/cards - section 9
 app.use('/', usersRouter);
 app.use('/', errorRouter);
 
