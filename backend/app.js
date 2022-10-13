@@ -28,11 +28,20 @@ app.use((req, res, next) => {
   next();
 });
 
+//login
 app.post('/signin', login);
+
+//signup
 app.post('/signup', createUser);
+
+//routes for users and cards
 app.use('/', usersRouter);
 app.use('/', errorRouter);
+
+//use auth middleware only for protected routes
 app.use(auth);
+
+// cards route for the specific user
 app.use('/', cardsRouter);
 app.listen(PORT, () => {
   console.log(`App listening at port ${PORT}`);
