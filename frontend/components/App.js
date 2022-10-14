@@ -93,7 +93,7 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   //get user info from the server
   useEffect(() => {
-    api.getUserInfo()
+    api.getUserInfo(token)
       .then((info) => {
         setCurrentUser(info);
       })
@@ -105,7 +105,7 @@ function App() {
   const [cards, setCards] = useState([]);
   // get initial cards from the server
   useEffect(() => {
-    api.getInitialCards()
+    api.getInitialCards(token)
       .then((cardsData) => {
         setCards(cardsData);
       })
@@ -119,7 +119,7 @@ function App() {
     const isLiked = card.likes.some((user) => user._id === currentUser._id);
 
     // Send a request to the API and getting the updated card data
-    api.changeLikeCardStatus(card._id, !isLiked)
+    api.changeLikeCardStatus(card._id, !isLiked, token)
       .then((newCard) => {
         setCards((state) =>
           state.map((currentCard) =>
@@ -133,7 +133,7 @@ function App() {
   }
 
   function handleCardDelete(card) {
-    api.deleteCard(card._id)
+    api.deleteCard(card._id, token)
       .then(() => {
         const newCards = cards.filter(
           (currentCard) => card._id !== currentCard._id
@@ -203,7 +203,7 @@ function App() {
   };
 
   const handleUpdateUser = (name, about) => {
-    api.saveProfileData(name, about)
+    api.saveProfileData(name, about, token)
       .then((info) => {
         setCurrentUser(info);
         closeAllPopups();
@@ -214,7 +214,7 @@ function App() {
   };
   // create new object from current user => replace avatar => setNew user
   const handleUpdateAvatar = (avatar) => {
-    api.updateProfilePicture(avatar)
+    api.updateProfilePicture(avatar, token)
       .then((info) => {
        setCurrentUser(info);
         closeAllPopups();
@@ -225,7 +225,7 @@ function App() {
   };
 
   const handleAddPlaceSubmit = (data) => {
-    api.saveNewCard(data)
+    api.saveNewCard(data, token)
       .then((newCard) => {
         setCards([newCard, ...cards]);
         closeAllPopups();
