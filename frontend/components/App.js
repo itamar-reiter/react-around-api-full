@@ -71,8 +71,8 @@ function App() {
     auth.login(email, password)
       .then((res => {
         if (res.token) {
-          setToken(res.token);
           toggleInfoTooltipSuccessLoginState();
+          setToken(res.token);
           localStorage.setItem("jwt", token);
           localStorage.setItem("email", res.email);
           setIsLoggedIn(true);
