@@ -2,23 +2,43 @@ const INVALID_DATA_ERROR_CODE = 400;
 const NOT_FOUND_ERROR_CODE = 404;
 const SERVER_ERROR_ERROR_CODE = 500;
 
-const defaultError = (res) => res.status(SERVER_ERROR_ERROR_CODE).send({ message: 'An error has occured on the server' });
+class NotFoundError extends Error {
+  constructor(message) {
+    super(message);
+    this.statusCode = 404;
+  }
+}
 
-const userUpdateError = (error, res, validationMessage) => {
+class InvalidDataError extends Error {
+  constructor(message) {
+    super(message);
+    this.statusCode = 400;
+  }
+}
+
+class ServerError extends Error {
+  constructor(message) {
+    super(message);
+    this.message = 'An error has occured on the server';
+    this.statusCode = 500;
+  }
+}
+
+//message: 'An error has occured on the server'
+
+const userUpdateError = (error, validationMessage) => {
   if (error.name === 'ValidationError') {
-    return res.status(INVALID_DATA_ERROR_CODE).send({ message: validationMessage });
+    throw new InvalidDataError(validationMessage);
   }
-  if (error.statusCode === NOT_FOUND_ERROR_CODE) {
-    return res.status(NOT_FOUND_ERROR_CODE).send({
-      message: `
-    ${error.name}: ${error.message}.
-    `,
-    });
+  else if (error.statusCode === NOT_FOUND_ERROR_CODE) {
+    throw new NotFoundError(error.message);
+  }
+  else {
+    throw new ServerError();
   }
 
-  return defaultError(res);
 };
 
 module.exports = {
-  defaultError, userUpdateError, INVALID_DATA_ERROR_CODE, NOT_FOUND_ERROR_CODE,
+  NotFoundError, InvalidDataError, ServerError, defaultError, userUpdateError, INVALID_DATA_ERROR_CODE, NOT_FOUND_ERROR_CODE,
 };

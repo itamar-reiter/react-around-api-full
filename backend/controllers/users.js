@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { NODE_ENV, JWT_SECRET } = process.env;
 const {
-  defaultError, INVALID_DATA_ERROR_CODE, NOT_FOUND_ERROR_CODE, userUpdateError,
+  NotFoundError, InvalidDataError, ServerError, INVALID_DATA_ERROR_CODE, NOT_FOUND_ERROR_CODE, userUpdateError,
 } = require('../utils/errors');
 
 const login = (req, res) => {
@@ -16,20 +16,24 @@ const login = (req, res) => {
       res.send({ token });
     })
     //TODO handle the catch errors , maybe it was handled at findByCredentials
+    //TODO centralize the error
     .catch(err => res.status(401).send({ message: err.message }));
 }
 
 const getUsers = (req, res) => Users.find({})
-  .then((users) => res.status(200).send(users))
-  .catch(() => defaultError(res));
+  .then((users) => {
+    if (!users) {
+      throw new ServerError();
+    }
+    res.status(200).send(users);
+  })
+  .catch(next);
 
 const getUserById = (req, res) => {
   const { id } = req.params;
   return Users.findOne({ _id: id })
     .orFail(() => {
-      const error = new Error(`not found user with ${id} id`);
-      error.statusCode = NOT_FOUND_ERROR_CODE;
-      throw error;
+      throw new NotFoundError(`not found user with ${id} id`);
     })
     .then((user) => {
       res.status(200).send(user);
@@ -75,7 +79,7 @@ const updateProfile = (req, res) => {
     })
     .then((profile) => res.status(200).send(profile))
     .catch((error) => {
-      userUpdateError(error, res, 'invalid name or description');
+      userUpdateError(error, 'invalid name or description');
     });
 };
 
@@ -93,7 +97,7 @@ const updateAvatar = (req, res) => {
     })
     .then((profile) => res.status(200).send(profile))
     .catch((error) => {
-      userUpdateError(error, res, 'invalid url');
+      userUpdateError(error, 'invalid url');
     });
 };
 
