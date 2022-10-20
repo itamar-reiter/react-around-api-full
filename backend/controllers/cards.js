@@ -1,5 +1,59 @@
 // const { Types } = require('mongoose');
 const Cards = require('../models/card');
+const {NotFoundError} = require('../utils/errors');
+
+const getCards = (req, res) => Cards.find({})
+  .then((cards) => res.status(200).send(cards))
+  .catch(next);
+
+const createCard = (req, res) => {
+  const owner = req.user._id;
+  const { name, link } = req.body;
+  Cards.create({ name, link, owner })
+    .then((card) => {
+      res.status(200).send({ data: card });
+    })
+    .catch(next);
+};
+
+const deleteCard = (req, res) => {
+  const id = req.params.cardId;
+  Cards.findByIdAndRemove(id)
+    .orFail(() => {
+      throw new NotFoundError(`not found card with ${id} id`);
+    })
+    .then((card) => {
+      if (card) {
+        res.status(200).send(card);
+      }
+    })
+    .catch(next);
+};
+
+const toggleCardLike = (req, res, isLike) => {
+  const id = req.user._id;
+  const method = isLike ? { $addToSet: { likes: id } } : { $pull: { likes: id } };
+  Cards.findByIdAndUpdate(
+    req.params.cardId,
+    method,
+    { new: true },
+  )
+    .orFail()
+    .then((card) => res.status(200).send(card))
+    .catch(next);
+};
+
+const likeCard = (req, res) => toggleCardLike(req, res, true);
+
+const unlikeCard = (req, res) => toggleCardLike(req, res, false);
+module.exports = {
+  getCards, createCard, deleteCard, likeCard, unlikeCard,
+};
+
+
+/*
+// const { Types } = require('mongoose');
+const Cards = require('../models/card');
 const { defaultError, INVALID_DATA_ERROR_CODE, NOT_FOUND_ERROR_CODE } = require('../utils/errors');
 
 const getCards = (req, res) => Cards.find({})
@@ -81,3 +135,5 @@ const unlikeCard = (req, res) => toggleCardLike(req, res, false);
 module.exports = {
   getCards, createCard, deleteCard, likeCard, unlikeCard,
 };
+
+*/

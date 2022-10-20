@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config();
 const auth = require('./middleware/auth');
+const errorMiddleware = require('./middleware/error');
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
 const errorRouter = require('./routes/userError');
@@ -36,6 +37,7 @@ app.use('/', errorRouter);
 
 // cards route for the specific user
 app.use('/', cardsRouter);
+app.use(errorMiddleware);
 app.listen(PORT, () => {
   console.log(`App listening at port ${PORT}`);
 });
