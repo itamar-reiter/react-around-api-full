@@ -1,22 +1,28 @@
 // const { Types } = require('mongoose');
 const Cards = require('../models/card');
-const {NotFoundError} = require('../utils/errors');
+const {NotFoundError, InvalidDataError, ServerError, NOT_FOUND_ERROR_CODE} = require('../utils/errors');
 
-const getCards = (req, res) => Cards.find({})
+const getCards = (req, res, next) => Cards.find({})
   .then((cards) => res.status(200).send(cards))
   .catch(next);
 
-const createCard = (req, res) => {
+const createCard = (req, res ,next) => {
   const owner = req.user._id;
   const { name, link } = req.body;
   Cards.create({ name, link, owner })
     .then((card) => {
       res.status(200).send({ data: card });
     })
-    .catch(next);
+    .catch((error) => {
+      if (error.name === 'ValidationError') {
+        next(new InvalidDataError('ValidationError: invalid image url or an item is missing.'));
+      } else {
+        next(new ServerError());
+      }
+    });
 };
 
-const deleteCard = (req, res) => {
+const deleteCard = (req, res ,next) => {
   const id = req.params.cardId;
   Cards.findByIdAndRemove(id)
     .orFail(() => {
@@ -27,10 +33,18 @@ const deleteCard = (req, res) => {
         res.status(200).send(card);
       }
     })
-    .catch(next);
+    .catch((error) => {
+      if (error.name === 'CastError') {
+        next(new InvalidDataError('invalid user id'));
+      } else if (error.statusCode === NOT_FOUND_ERROR_CODE) {
+        next(new NotFoundError('Card not found'));
+      } else {
+        next(new ServerError());
+      }
+    });
 };
 
-const toggleCardLike = (req, res, isLike) => {
+const toggleCardLike = (req, res, next, isLike) => {
   const id = req.user._id;
   const method = isLike ? { $addToSet: { likes: id } } : { $pull: { likes: id } };
   Cards.findByIdAndUpdate(
@@ -40,12 +54,20 @@ const toggleCardLike = (req, res, isLike) => {
   )
     .orFail()
     .then((card) => res.status(200).send(card))
-    .catch(next);
+    .catch((error) => {
+      if (error.name === 'CastError') {
+        next(new InvalidDataError('invalid user id'));
+      } else if (error.name === 'DocumentNotFoundError') {
+       next(new NotFoundError('Card not found'));
+      } else {
+        next(new ServerError());
+      }
+    });
 };
 
-const likeCard = (req, res) => toggleCardLike(req, res, true);
+const likeCard = (req, res, next) => toggleCardLike(req, res, next, true);
 
-const unlikeCard = (req, res) => toggleCardLike(req, res, false);
+const unlikeCard = (req, res, next) => toggleCardLike(req, res, next, false);
 module.exports = {
   getCards, createCard, deleteCard, likeCard, unlikeCard,
 };

@@ -3,10 +3,10 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { NODE_ENV, JWT_SECRET } = process.env;
 const {
-  NotFoundError, InvalidDataError, ServerError, INVALID_DATA_ERROR_CODE, NOT_FOUND_ERROR_CODE, userUpdateError,
+  NotFoundError, InvalidDataError, ServerError, INVALID_DATA_ERROR_CODE, NOT_FOUND_ERROR_CODE, userUpdateError, UnauthenticatedError, UNAUTHENTICATED_ERROR_ERROR_CODE
 } = require('../utils/errors');
 
-const login = (req, res) => {
+const login = (req, res, next) => {
   const { email, password } = req.body;
   Users.findUserByCredentials(email, password)
     //TODO make so the hashed password wont come back to the user
@@ -15,10 +15,17 @@ const login = (req, res) => {
         NODE_ENV === 'production' ? JWT_SECRET : 'not-so-secret-string');
       res.send({ token });
     })
-    .catch(next);
+    .catch((error) => {
+      if (error.statusCode === UNAUTHENTICATED_ERROR_ERROR_CODE) {
+        next(new UnauthenticatedError('Could not log in. email or password are invalid'));
+      }
+      else {
+        next(new ServerError());
+      }
+    });
 }
 
-const getUsers = (req, res) => Users.find({})
+const getUsers = (req, res, next) => Users.find({})
   .then((users) => {
     if (!users) {
       throw new ServerError();
@@ -27,7 +34,7 @@ const getUsers = (req, res) => Users.find({})
   })
   .catch(next);
 
-const getUserById = (req, res) => {
+const getUserById = (req, res, next) => {
   const { id } = req.params;
   return Users.findOne({ _id: id })
     .orFail(() => {
@@ -36,20 +43,18 @@ const getUserById = (req, res) => {
     .then((user) => {
       res.status(200).send(user);
     })
-    .catch(next
-       //TODELETE
-       /* if (error.statusCode === NOT_FOUND_ERROR_CODE) {
-        res.status(NOT_FOUND_ERROR_CODE).send({
-          message: `
-        ${error.name}: ${error.message}.
-        `,
-        });
+    .catch((error) => {
+      if (error.name === 'CastError') {
+        next(new InvalidDataError('Invalid user id'));
+      } else if (error.statusCode === NOT_FOUND_ERROR_CODE) {
+       next(new NotFoundError('user is not found'));
+      } else {
+       next(error);
       }
-      */
-    );
+    });
 };
 
-const getUserData = (req, res) => {
+const getUserData = (req, res, next) => {
   const { id } = req.body;
   return Users.findOne({ _id: id })
     .then((user) => {
@@ -58,7 +63,7 @@ const getUserData = (req, res) => {
     .catch(next);
 };
 
-const updateProfile = (req, res) => {
+const updateProfile = (req, res, next) => {
   const id = req.user._id;
   Users.findOneAndUpdate({ _id: id }, { name: req.body.name, about: req.body.about }, {
     new: true,
@@ -69,10 +74,23 @@ const updateProfile = (req, res) => {
       throw new NotFoundError(`not found user with ${id} id`);
     })
     .then((profile) => res.status(200).send(profile))
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new InvalidDataError("Invalid name or description"));
+      }
+      else if (err.name === 'TypeError') {
+        next(new InvalidDataError('one or more of the request body is missing'));
+      }
+      else if (err.statusCode === NOT_FOUND_ERROR_CODE) {
+        next(new NotFoundError(`not found user with ${id} id`));
+      }
+      else {
+        next(new ServerError());
+      }
+    });
 };
 
-const updateAvatar = (req, res) => {
+const updateAvatar = (req, res, next) => {
   const id = req.user._id;
   Users.findOneAndUpdate({ _id: id }, { avatar: req.body.avatar }, {
     new: true,
@@ -83,10 +101,23 @@ const updateAvatar = (req, res) => {
       throw new NotFoundError(`not found user with ${id} id`);
     })
     .then((profile) => res.status(200).send(profile))
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new InvalidDataError("Invalid url"));
+      }
+      else if (err.name === 'TypeError') {
+        next(new InvalidDataError('one or more of the request body is missing'));
+      }
+      else if (err.statusCode === NOT_FOUND_ERROR_CODE) {
+        next(new NotFoundError(`not found user with ${id} id`));
+      }
+      else {
+        next(new ServerError());
+      }
+    });
 };
 
-const createUser = (req, res) =>
+const createUser = (req, res, next) =>
   bcrypt.hash(req.body.password, 10)
     .then(hash => Users.create({ password: hash, email: req.body.email }))
     .orFail()
@@ -94,7 +125,16 @@ const createUser = (req, res) =>
     .then((user) => {
       res.status(200).send(user);
     })
-    .catch(next);
+    .catch((error) => {
+      //TODO handling case when creating duplicate user and the app crash (mongooseError 'duplicate key error')
+      if (error.name === 'ValidationError' || error.name === 'TypeError') {
+      next(new InvalidDataError('Invalid avatar url or an item is missing.'));
+      } else {
+        next(error);
+      }
+    });
+
+
 module.exports = {
   login, getUsers, getUserById, getUserData, createUser, updateProfile, updateAvatar,
 };

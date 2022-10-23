@@ -3,7 +3,7 @@ const {
 } = require('../utils/errors');
 
 module.exports = (err, req, res, next) => {
-  if (err.name === 'CastError') {
+ /*  if (err.name === 'CastError') {
     res.status(INVALID_DATA_ERROR_CODE).send({ message: 'Invalid user id' });
   }
   else if (err.name === 'ValidationError') {
@@ -13,16 +13,17 @@ module.exports = (err, req, res, next) => {
     res.status(NOT_FOUND_ERROR_CODE).send({
       message: 'Object not found',
     });
-  }
-  else {
+  } */
+
+  console.log("in error middleware");
+  console.log(err.name);
     const { statusCode = 500, message } = err;
     res
       .status(statusCode)
       .send({
         // check the status and display a message based on it
         message: statusCode === 500
-          ? 'An error occurred on the server'
+          ? 'An error occurred on the server (through middleware)'
           : message
       });
-  }
 }

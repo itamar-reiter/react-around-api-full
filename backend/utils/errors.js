@@ -1,5 +1,6 @@
 const INVALID_DATA_ERROR_CODE = 400;
 const UNAUTHENTICATED_ERROR_ERROR_CODE = 401;
+const UNAUTHORIZED_ERROR_ERROR_CODE = 403;
 const NOT_FOUND_ERROR_CODE = 404;
 
 class InvalidDataError extends Error {
@@ -13,6 +14,13 @@ class UnauthenticatedError extends Error {
   constructor(message) {
     super(message);
     this.statusCode = UNAUTHENTICATED_ERROR_ERROR_CODE;
+  }
+}
+
+class UnauthorizedError extends Error {
+  constructor(message) {
+    super(message);
+    this.statusCode = UNAUTHORIZED_ERROR_ERROR_CODE;
   }
 }
 
@@ -46,7 +54,7 @@ class ServerError extends Error {
 }; */
 
 module.exports = {
-  NotFoundError, UnauthenticatedError, InvalidDataError, ServerError, INVALID_DATA_ERROR_CODE, NOT_FOUND_ERROR_CODE,
+  NotFoundError, UnauthenticatedError, UnauthorizedError, InvalidDataError, ServerError, INVALID_DATA_ERROR_CODE, NOT_FOUND_ERROR_CODE,
 };
 
 

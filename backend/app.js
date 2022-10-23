@@ -2,7 +2,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config();
-const auth = require('./middleware/auth');
+const authMiddleware = require('./middleware/auth');
 const errorMiddleware = require('./middleware/error');
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
@@ -28,7 +28,7 @@ app.post('/signin', login);
 app.post('/signup', createUser);
 
 //use auth middleware only for protected routes
-app.use(auth);
+app.use(authMiddleware);
 
 //routes for users and cards
 //TODO prevent user from editing users/cards - section 9
