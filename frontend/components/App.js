@@ -27,7 +27,7 @@ function App() {
 
   const [email, setEmail] = useState("");
   const [token, setToken] = useState(undefined);
-  
+
 
   //hook for token verification and auto login when rendering app
 
@@ -216,7 +216,7 @@ function App() {
   const handleUpdateAvatar = (avatar) => {
     api.updateProfilePicture(avatar, token)
       .then((info) => {
-       setCurrentUser(info);
+        setCurrentUser(info);
         closeAllPopups();
       })
       .catch((err) => {
@@ -225,7 +225,7 @@ function App() {
   };
 
   const handleAddPlaceSubmit = (data) => {
-    api.saveNewCard(data, token)
+    api.createCard(data, token)
       .then((newCard) => {
         setCards([newCard, ...cards]);
         closeAllPopups();

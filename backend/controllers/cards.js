@@ -22,6 +22,7 @@ const createCard = (req, res ,next) => {
     });
 };
 
+//TODO - only card owner should be able to delete the card
 const deleteCard = (req, res ,next) => {
   const id = req.params.cardId;
   Cards.findByIdAndRemove(id)

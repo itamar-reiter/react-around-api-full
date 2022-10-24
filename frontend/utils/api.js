@@ -64,7 +64,7 @@ class Api {
       .then((res) => this._checkResponse(res));
   }
 
-  saveNewCard(data, token) {
+  createCard(data, token) {
     return fetch(`${this._baseUrl}/cards`, {
       method: "POST",
       headers: {

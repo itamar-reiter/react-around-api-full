@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+const {errors} = require('celebrate');
 const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config();
@@ -37,6 +38,7 @@ app.use('/', errorRouter);
 
 // cards route for the specific user
 app.use('/', cardsRouter);
+app.use(errors());
 app.use(errorMiddleware);
 app.listen(PORT, () => {
   console.log(`App listening at port ${PORT}`);
