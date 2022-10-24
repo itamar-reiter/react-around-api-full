@@ -9,6 +9,7 @@ const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
 const errorRouter = require('./routes/userError');
 const {login, createUser} = require('./controllers/users');
+const { requestLogger, errorLogger } = require('./middleware/logger');
 // listen to port 3000
 const { PORT = 3000 } = process.env;
 
@@ -21,6 +22,8 @@ const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+app.use(requestLogger);
 
 //login
 app.post('/signin', login);
@@ -38,6 +41,7 @@ app.use('/', errorRouter);
 
 // cards route for the specific user
 app.use('/', cardsRouter);
+app.use(errorLogger);
 app.use(errors());
 app.use(errorMiddleware);
 app.listen(PORT, () => {
