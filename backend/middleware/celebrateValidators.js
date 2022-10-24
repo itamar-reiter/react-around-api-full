@@ -12,6 +12,7 @@ const {urlRegex} = require('../utils/regex');
 //cards validators
 
 //TODO fix url validation
+//TODO fix "Requested resource not found" error that comes across all requests
 
 const createCardValidator = celebrate({
   body: Joi.object().keys({
