@@ -1,0 +1,23 @@
+.sign-form__submit-button {
+  width: 358px;
+  height: 50px;
+  margin: 186px auto 0;
+  padding: 0;
+  background-color: white;
+  border-radius: 2px;
+  border: 0;
+  color: black;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 22px;
+  text-align: center;
+  cursor: pointer;
+  opacity: 1;
+  transition-property: opacity;
+  transition-duration: 0.3s;
+  transition-timing-function: linear;
+}
+
+.sign-form__submit-button:hover {
+  opacity: 0.85;
+}
