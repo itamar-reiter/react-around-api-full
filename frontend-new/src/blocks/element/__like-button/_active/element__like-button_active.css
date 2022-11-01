@@ -1,8 +1,0 @@
-.element__like-button_active{
-  background: url(../../../../images/like-black.svg);
-  transition-duration: 0.1s;
-  transition-delay: 0s;
-}
-.element__like-button_active:hover{
-  opacity: 1;
-}

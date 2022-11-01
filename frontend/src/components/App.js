@@ -30,7 +30,7 @@ function App() {
 
 
   //hook for token verification and auto login when rendering app
-
+  
   useEffect(() => {
     setToken(localStorage.getItem("jwt"));
     if (token) {
@@ -48,7 +48,7 @@ function App() {
           console.log(err);
         });
     }
-  });
+  }, [token, history]);
 
   const onRegister = (email, password) => {
     auth.register(email, password)
@@ -100,7 +100,7 @@ function App() {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [token]);
 
   const [cards, setCards] = useState([]);
   // get initial cards from the server
@@ -112,7 +112,7 @@ function App() {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [token]);
 
   function handleCardLike(card) {
     // Check one more time if this card was already liked
@@ -147,7 +147,9 @@ function App() {
 
   //hook for auth if logged in
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+//TODELETE 
 
+/* setIsLoggedIn(true); */
   //hooks for opening the popups
 
   const [isInfoTooltipSuccessRegisterationOpen, setIsInfoTooltipSuccessRegisterationOpen] = useState(false);

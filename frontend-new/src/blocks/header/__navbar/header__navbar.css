@@ -1,9 +1,0 @@
-.header__navbar{
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  column-gap: 24px;
-  margin: 51px 0 auto auto;
-  padding: 0;
-  text-align: center;
-}
