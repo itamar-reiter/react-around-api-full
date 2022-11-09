@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 const {errors} = require('celebrate');
 const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
 require('dotenv').config();
 const authMiddleware = require('./middleware/auth');
@@ -22,6 +23,8 @@ const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+app.use(cors());
 
 app.use(requestLogger);
 

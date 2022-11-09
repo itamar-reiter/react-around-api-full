@@ -1,8 +1,8 @@
-import { authData } from "./constants";
+import { apiData } from "./constants";
 
 class Auth {
   constructor(data) {
-    this._serverAdress = data.serverAdress;
+    this._serverAdress = data.baseUrl;
   }
 
   _checkResponse = (res) => {
@@ -61,4 +61,4 @@ class Auth {
   }
 }
 
-export default new Auth(authData);
+export default new Auth(apiData);
