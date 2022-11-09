@@ -14,6 +14,7 @@ const createCard = (req, res ,next) => {
       res.status(200).send({ data: card });
     })
     .catch((error) => {
+      console.log(error);
       if (error.name === 'ValidationError') {
         next(new InvalidDataError('ValidationError: invalid image url or an item is missing.'));
       } else {
@@ -35,6 +36,7 @@ const deleteCard = (req, res ,next) => {
       }
     })
     .catch((error) => {
+      console.log(error);
       if (error.name === 'CastError') {
         next(new InvalidDataError('invalid user id'));
       } else if (error.statusCode === NOT_FOUND_ERROR_CODE) {
@@ -56,6 +58,7 @@ const toggleCardLike = (req, res, next, isLike) => {
     .orFail()
     .then((card) => res.status(200).send(card))
     .catch((error) => {
+      console.log(error);
       if (error.name === 'CastError') {
         next(new InvalidDataError('invalid user id'));
       } else if (error.name === 'DocumentNotFoundError') {

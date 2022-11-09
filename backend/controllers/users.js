@@ -6,6 +6,8 @@ const {
   NotFoundError, InvalidDataError, ServerError, INVALID_DATA_ERROR_CODE, NOT_FOUND_ERROR_CODE, userUpdateError, UnauthenticatedError, UNAUTHENTICATED_ERROR_ERROR_CODE
 } = require('../utils/errors');
 
+
+//TODO console.log(error) for each catch;
 const login = (req, res, next) => {
   const { email, password } = req.body;
   Users.findUserByCredentials(email, password)
@@ -16,6 +18,7 @@ const login = (req, res, next) => {
       res.send({ token });
     })
     .catch((error) => {
+      console.log(error);
       if (error.statusCode === UNAUTHENTICATED_ERROR_ERROR_CODE) {
         next(new UnauthenticatedError('Could not log in. email or password are invalid'));
       }
@@ -44,6 +47,7 @@ const getUserById = (req, res, next) => {
       res.status(200).send(user);
     })
     .catch((error) => {
+      console.log(error);
       if (error.name === 'CastError') {
         next(new InvalidDataError('Invalid user id'));
       } else if (error.statusCode === NOT_FOUND_ERROR_CODE) {
@@ -75,6 +79,7 @@ const updateProfile = (req, res, next) => {
     })
     .then((profile) => res.status(200).send(profile))
     .catch((err) => {
+      console.log(err);
       if (err.name === 'ValidationError') {
         next(new InvalidDataError("Invalid name or description"));
       }
@@ -102,6 +107,7 @@ const updateAvatar = (req, res, next) => {
     })
     .then((profile) => res.status(200).send(profile))
     .catch((err) => {
+      console.log(err);
       if (err.name === 'ValidationError') {
         next(new InvalidDataError("Invalid url"));
       }
@@ -126,6 +132,7 @@ const createUser = (req, res, next) =>
       res.status(200).send(user);
     })
     .catch((error) => {
+      console.log(error);
       //TODO handling case when creating duplicate user and the app crash (mongooseError 'duplicate key error')
       if (error.name === 'ValidationError' || error.name === 'TypeError') {
       next(new InvalidDataError('Invalid avatar url or an item is missing.'));
