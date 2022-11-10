@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 const { urlRegex } = require('../utils/regex');
-const {AnauthenticatedError} = require('../utils/errors');
+const {UnauthenticatedError} = require('../utils/errors');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 
@@ -50,12 +50,12 @@ userSchema.statics.findUserByCredentials = function findUserByCredentials(email,
   return this.findOne({ email: email }).select('+password')
     .then(user => {
       if (!user) {
-        return Promise.reject(new AnauthenticatedError('Email or Password are incorrect'));
+        return Promise.reject(new UnauthenticatedError('Email or Password are incorrect'));
       }
       return bcrypt.compare(password, user.password)
         .then(matched => {
           if (!matched) {
-            return Promise.reject(new AnauthenticatedError('bad cred'));
+            return Promise.reject(new UnauthenticatedError('bad cred'));
           }
           return user;
         })
