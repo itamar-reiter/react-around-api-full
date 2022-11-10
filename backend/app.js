@@ -25,7 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(cors({
-origin: 'https://www.itamarreiter.students.nomoredomainssbs.ru/'
+origin: 'https://www.itamarreiter.students.nomoredomainssbs.ru'
 }));
 
 app.use(requestLogger);
