@@ -124,9 +124,11 @@ const updateAvatar = (req, res, next) => {
 };
 
 const createUser = (req, res, next) =>
-  bcrypt.hash(req.body.password, 10)
+bcrypt.hash(req.body.password, 10)
     .then(hash => Users.create({ password: hash, email: req.body.email }))
-    .orFail()
+    .orFail(() => {
+      throw new ServerError();
+    })
     //TODO returning the user without the hashed password
     .then((user) => {
       res.status(200).send(user);
