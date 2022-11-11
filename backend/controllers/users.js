@@ -123,12 +123,12 @@ const updateAvatar = (req, res, next) => {
     });
 };
 
-const createUser = (req, res, next) =>
+const createUser = (req, res, next) => {
   bcrypt.hash(req.body.password, 10)
     .then(hash => Users.create({ email: req.body.email, password: hash }))
-    .orFail(() => {
+    /* .orFail(() => {
       throw new ServerError();
-    })
+    }) */
     //TODO returning the user without the hashed password
     .then((user) => {
       res.status(200).send(user);
@@ -137,11 +137,12 @@ const createUser = (req, res, next) =>
       console.log(error);
       //TODO handling case when creating duplicate user and the app crash (mongooseError 'duplicate key error')
       if (error.name === 'ValidationError' || error.name === 'TypeError') {
-        next(new InvalidDataError('Invalid avatar url or an item is missing.'));
+        next(new InvalidDataError('Invalid email url or password. an item is missing.'));
       } else {
         next(error);
       }
     });
+};
 
 
 module.exports = {
