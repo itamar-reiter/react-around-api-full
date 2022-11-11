@@ -16,7 +16,7 @@ module.exports = (err, req, res, next) => {
   } */
 
   console.log("in error middleware");
-  console.log(err.name);
+  console.log(err.message);
     const { statusCode = 500, message } = err;
     res
       .status(statusCode)
