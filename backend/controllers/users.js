@@ -51,9 +51,9 @@ const getUserById = (req, res, next) => {
       if (error.name === 'CastError') {
         next(new InvalidDataError('Invalid user id'));
       } else if (error.statusCode === NOT_FOUND_ERROR_CODE) {
-       next(new NotFoundError('user is not found'));
+        next(new NotFoundError('user is not found'));
       } else {
-       next(error);
+        next(error);
       }
     });
 };
@@ -124,8 +124,8 @@ const updateAvatar = (req, res, next) => {
 };
 
 const createUser = (req, res, next) =>
-bcrypt.hash(req.body.password, 10)
-    .then(hash => Users.create({ password: hash, email: req.body.email }))
+  bcrypt.hash(req.body.password, 10)
+    .then(hash => Users.create({ email: req.body.email, password: hash }))
     .orFail(() => {
       throw new ServerError();
     })
@@ -137,7 +137,7 @@ bcrypt.hash(req.body.password, 10)
       console.log(error);
       //TODO handling case when creating duplicate user and the app crash (mongooseError 'duplicate key error')
       if (error.name === 'ValidationError' || error.name === 'TypeError') {
-      next(new InvalidDataError('Invalid avatar url or an item is missing.'));
+        next(new InvalidDataError('Invalid avatar url or an item is missing.'));
       } else {
         next(error);
       }
