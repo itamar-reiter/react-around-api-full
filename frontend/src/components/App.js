@@ -34,6 +34,7 @@ function App() {
   useEffect(() => {
     setToken(localStorage.getItem("jwt"));
     if (token) {
+      console.log(token);
       auth.checkToken(token)
         .then((res) => {
           if (res) {
@@ -75,6 +76,7 @@ function App() {
         if (res.token) {
           toggleInfoTooltipSuccessLoginState();
           setToken(res.token);
+          console.log(token);
           localStorage.setItem("jwt", token);
           localStorage.setItem("email", res.email);
           setIsLoggedIn(true);
@@ -120,7 +122,7 @@ function App() {
           console.log(err);
         });
     }
-  }, []);
+  }, [token]);
 
   function handleCardLike(card) {
     // Check one more time if this card was already liked
