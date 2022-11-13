@@ -5,8 +5,8 @@ class Api {
     this._baseUrl = data.baseUrl;
   }
 
-  getInitialAppInfo() {
-    return Promise.all([this.getUserInfo(), this.getInitialCards()]);
+  getInitialAppInfo(token) {
+    return Promise.all([this.getUserInfo(token), this.getInitialCards(token)]);
   }
 
   _checkResponse = (res) => {

@@ -94,7 +94,7 @@ function App() {
   //hook for set current user information
   const [currentUser, setCurrentUser] = useState({});
   //get user info from the server
-  useEffect(() => {
+ /*  useEffect(() => {
     if (token) {
       api.getUserInfo(token)
         .then((info) => {
@@ -104,15 +104,16 @@ function App() {
           console.log(err);
         });
     }
-  }, [token]);
+  }, [token]); */
 
   const [cards, setCards] = useState([]);
   // get initial cards from the server
   useEffect(() => {
     console.log(token);
     if (token) {
-      api.getInitialCards(token)
-        .then((cardsData) => {
+      api.getInitialAppInfo(token)
+        .then((userInfo, cardsData) => {
+          setCurrentUser(userInfo);
           setCards(cardsData);
         })
         .catch((err) => {
