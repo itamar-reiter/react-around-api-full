@@ -30,7 +30,7 @@ function App() {
 
 
   //hook for token verification and auto login when rendering app
-  
+
   useEffect(() => {
     setToken(localStorage.getItem("jwt"));
     if (token) {
@@ -93,25 +93,29 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   //get user info from the server
   useEffect(() => {
-    api.getUserInfo(token)
-      .then((info) => {
-        setCurrentUser(info);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (token) {
+      api.getUserInfo(token)
+        .then((info) => {
+          setCurrentUser(info);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }, [token]);
 
   const [cards, setCards] = useState([]);
   // get initial cards from the server
   useEffect(() => {
-    api.getInitialCards(token)
-      .then((cardsData) => {
-        setCards(cardsData);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (token) {
+      api.getInitialCards(token)
+        .then((cardsData) => {
+          setCards(cardsData);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }, [token]);
 
   function handleCardLike(card) {
@@ -147,9 +151,9 @@ function App() {
 
   //hook for auth if logged in
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-//TODELETE 
+  //TODELETE 
 
-/* setIsLoggedIn(true); */
+  /* setIsLoggedIn(true); */
   //hooks for opening the popups
 
   const [isInfoTooltipSuccessRegisterationOpen, setIsInfoTooltipSuccessRegisterationOpen] = useState(false);
