@@ -79,9 +79,9 @@ function App() {
           setToken(res.token);
           console.log(token);
           localStorage.setItem("jwt", token);
-          localStorage.setItem("email", res.email);
+          localStorage.setItem("email", res.user.email);
           setIsLoggedIn(true);
-          setEmail(email);
+          setEmail(localStorage.getItem("email"));
           history.push("/");
         }
         else {
