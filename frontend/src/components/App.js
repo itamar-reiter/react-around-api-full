@@ -33,7 +33,7 @@ function App() {
 
   useEffect(() => {
     setToken(localStorage.getItem("jwt"));
-    if (token && token !== null) {
+    if (token && token != null) {
       console.log(token);
       auth.checkToken(token)
         .then((res) => {
@@ -111,7 +111,7 @@ function App() {
   const [cards, setCards] = useState([]);
   // get initial cards from the server
   useEffect(() => {
-    if (token && token !== null) {
+    if (token && token != null) {
       console.log(token);
       api.getInitialAppInfo(token)
         .then((userInfo, cardsData) => {
