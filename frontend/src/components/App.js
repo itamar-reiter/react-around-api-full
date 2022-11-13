@@ -53,6 +53,8 @@ function App() {
   const onRegister = (email, password) => {
     auth.register(email, password)
       .then((res) => {
+        console.log(res.data._id);
+        console.log(res.data);
         if (res.data._id) {
           console.log(res);
           toggleInfoTooltipSuccessRegisterationState();
@@ -107,6 +109,7 @@ function App() {
   const [cards, setCards] = useState([]);
   // get initial cards from the server
   useEffect(() => {
+    console.log(token);
     if (token) {
       api.getInitialCards(token)
         .then((cardsData) => {
