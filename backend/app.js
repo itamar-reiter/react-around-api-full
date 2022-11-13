@@ -28,6 +28,13 @@ app.use(cors());
 
 app.use(requestLogger);
 
+//crash test
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Server will crash now');
+  }, 0);
+});
+
 //login
 app.post('/signin', login);
 
@@ -37,8 +44,10 @@ app.post('/signup', createUser);
 //use auth middleware only for protected routes
 app.use(authMiddleware);
 
+//TODO prevent user from editing users/cards - section
+
+
 //routes for users and cards
-//TODO prevent user from editing users/cards - section 9
 app.use('/', usersRouter);
 app.use('/', errorRouter);
 

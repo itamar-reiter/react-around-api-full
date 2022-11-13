@@ -109,8 +109,8 @@ function App() {
   const [cards, setCards] = useState([]);
   // get initial cards from the server
   useEffect(() => {
-    console.log(token);
     if (token) {
+      console.log(token);
       api.getInitialAppInfo(token)
         .then((userInfo, cardsData) => {
           setCurrentUser(userInfo);
@@ -120,7 +120,7 @@ function App() {
           console.log(err);
         });
     }
-  }, [token]);
+  }, []);
 
   function handleCardLike(card) {
     // Check one more time if this card was already liked
