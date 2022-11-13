@@ -75,8 +75,9 @@ function App() {
       .then((res => {
         if (res.token) {
           toggleInfoTooltipSuccessLoginState();
-          setToken(res.token);
-          console.log(token);
+          setToken(res.token).then(() => {
+            console.log(token);
+          });
           localStorage.setItem("jwt", token);
           localStorage.setItem("email", res.email);
           setIsLoggedIn(true);
