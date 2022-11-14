@@ -51,6 +51,22 @@ function App() {
     }
   }, [token, history]);
 
+  const [cards, setCards] = useState([]);
+  // get initial cards from the server
+  useEffect(() => {
+    if (token && token != null) {
+      console.log(token);
+      api.getInitialAppInfo(token)
+        .then((userInfo, cardsData) => {
+          setCurrentUser(userInfo);
+          setCards(cardsData);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [token]);
+
   const onRegister = (email, password) => {
     auth.register(email, password)
       .then((res) => {
@@ -75,13 +91,13 @@ function App() {
       .then((res => {
         if (res.token) {
           console.log(res);
-          toggleInfoTooltipSuccessLoginState();
-          setToken(res.token);
-          console.log(token);
-          localStorage.setItem("jwt", token);
+          localStorage.setItem("jwt", res.token);
+          setToken(localStorage.getItem("jwt"));
           localStorage.setItem("email", res.user.email);
-          setIsLoggedIn(true);
           setEmail(localStorage.getItem("email"));
+          console.log(res.token);
+          toggleInfoTooltipSuccessLoginState();
+          setIsLoggedIn(true);
           history.push("/");
         }
         else {
@@ -109,21 +125,7 @@ function App() {
     }
   }, [token]); */
 
-  const [cards, setCards] = useState([]);
-  // get initial cards from the server
-  useEffect(() => {
-    if (token && token != null) {
-      console.log(token);
-      api.getInitialAppInfo(token)
-        .then((userInfo, cardsData) => {
-          setCurrentUser(userInfo);
-          setCards(cardsData);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }, [token]);
+  
 
   function handleCardLike(card) {
     // Check one more time if this card was already liked
