@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 const { UnauthorizedError } = require('../utils/errors');
 
 module.exports = (req, res, next) => {
@@ -10,7 +11,7 @@ module.exports = (req, res, next) => {
   const token = authorization.replace('Bearer ', '');
   let payload;
   try {
-    payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'not-so-secret-string');
+    payload = jwt.verify(token, process.env.NODE_ENV === 'production' ? process.env.JWT_SECRET : 'not-so-secret-string');
   } catch (err) {
     console.log('through auth middleware, jwt payload not loaded')
     next(new UnauthorizedError('Authorization required'));
