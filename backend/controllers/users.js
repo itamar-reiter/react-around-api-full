@@ -59,7 +59,7 @@ const getUserById = (req, res, next) => {
 };
 
 const getUserData = (req, res, next) => {
-  const { id } = req.body;
+  const { id } = req.user._id;
   return Users.findOne({ _id: id })
     .then((user) => {
       res.status(200).send(user);
