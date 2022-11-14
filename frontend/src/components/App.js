@@ -25,15 +25,20 @@ function App() {
 
   const history = useHistory();
 
-  const [email, setEmail] = useState("");
+  //hook for set current user information
+  const [currentUser, setCurrentUser] = useState({});
+  
   const [token, setToken] = useState(undefined);
+  
+  const [email, setEmail] = useState("");
 
+  const [cards, setCards] = useState([]);
 
-  //hook for token verification and auto login when rendering app
-
+  
+  //Effect for token verification and auto login when rendering app
   useEffect(() => {
     setToken(localStorage.getItem("jwt"));
-    if (token && token != null) {
+    if (token) {
       console.log(token);
       auth.checkToken(token)
         .then((res) => {
@@ -51,10 +56,10 @@ function App() {
     }
   }, [token, history]);
 
-  const [cards, setCards] = useState([]);
+  
   // get initial cards from the server
   useEffect(() => {
-    if (token && token != null) {
+    if (token) {
       console.log(token);
       api.getInitialAppInfo(token)
         .then((userInfo, cardsData) => {
@@ -109,21 +114,6 @@ function App() {
         toggleInfoTooltipFailedLoginState();
       });
   }
-
-  //hook for set current user information
-  const [currentUser, setCurrentUser] = useState({});
-  //get user info from the server
- /*  useEffect(() => {
-    if (token) {
-      api.getUserInfo(token)
-        .then((info) => {
-          setCurrentUser(info);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }, [token]); */
 
   
 
