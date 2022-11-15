@@ -62,6 +62,7 @@ const getUserData = (req, res, next) => {
   const { id } = req.user._id;
   return Users.findOne({ _id: id })
     .then((user) => {
+      console.log(user);
       res.status(200).send(user);
     })
     .catch(next);
