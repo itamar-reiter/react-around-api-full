@@ -42,7 +42,7 @@ app.post('/signin', login);
 app.post('/signup', createUser);
 
 //use auth middleware only for protected routes
-app.use(authMiddleware);
+//app.use(authMiddleware);
 
 //TODO prevent user from editing users/cards - section
 
