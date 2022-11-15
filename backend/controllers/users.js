@@ -59,7 +59,7 @@ const getUserById = (req, res, next) => {
 };
 
 const getUserData = (req, res, next) => {
-  const { id } = req.user._id;
+  const id = req.user._id;
   console.log(req.user._id + "  at getUserData");
   return Users.findOne({ _id: id })
     .then((user) => {
