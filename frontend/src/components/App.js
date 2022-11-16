@@ -37,11 +37,9 @@ function App() {
   useEffect(() => {
     setToken(localStorage.getItem("jwt"));
     if (token) {
-      console.log(token);
       auth.checkToken(token)
         .then((res) => {
           if (res) {
-            console.log(res);
             setCurrentUser(res);
             setIsLoggedIn(true);
             history.push('/');
@@ -59,7 +57,6 @@ function App() {
   // get initial cards from the server
   useEffect(() => {
     if (token) {
-      console.log(token);
       api.getInitialCards(token)
         .then((cardsData) => {
           setCards(cardsData);
@@ -73,10 +70,8 @@ function App() {
   const onRegister = (email, password) => {
     auth.register(email, password)
       .then((res) => {
-        console.log(res.data._id);
-        console.log(res.data);
-        if (res.data._id) {
-          console.log(res);
+        console.log(res);
+        if (res._id) {
           toggleInfoTooltipSuccessRegisterationState();
           history.push('/signin');
         }

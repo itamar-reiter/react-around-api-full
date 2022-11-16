@@ -1,5 +1,3 @@
-const { celebrate, Joi } = require('celebrate');
-const { urlRegex } = require('../utils/regex');
 const cardsRouter = require('express').Router();
 const {
   getCards, createCard, deleteCard, likeCard, unlikeCard,

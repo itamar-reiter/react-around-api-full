@@ -6,7 +6,6 @@ class Auth {
   }
 
   _checkResponse = (res) => {
-    console.log(res);
     return res.ok ? res.json() : Promise.reject(`in checkRespone: Error: ${res.status}`);
   };
 
