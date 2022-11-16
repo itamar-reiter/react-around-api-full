@@ -29,8 +29,6 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   
   const [token, setToken] = useState(undefined);
-  
-  const [email, setEmail] = useState("");
 
   const [cards, setCards] = useState([]);
 
@@ -43,7 +41,8 @@ function App() {
       auth.checkToken(token)
         .then((res) => {
           if (res) {
-            setEmail(res.data.email);
+            console.log(res);
+            setCurrentUser(res);
             setIsLoggedIn(true);
             history.push('/');
           }
@@ -61,9 +60,8 @@ function App() {
   useEffect(() => {
     if (token) {
       console.log(token);
-      api.getInitialAppInfo(token)
-        .then((userInfo, cardsData) => {
-          setCurrentUser(userInfo);
+      api.getInitialCards(token)
+        .then((cardsData) => {
           setCards(cardsData);
         })
         .catch((err) => {
@@ -90,7 +88,7 @@ function App() {
         toggleInfoTooltipFailedRegisterationState();
       });
   }
-
+// Login - 
   const onLogin = (email, password) => {
     auth.login(email, password)
       .then((res => {
@@ -98,8 +96,7 @@ function App() {
           console.log(res);
           localStorage.setItem("jwt", res.token);
           setToken(localStorage.getItem("jwt"));
-          localStorage.setItem("email", res.user.email);
-          setEmail(localStorage.getItem("email"));
+          localStorage.setItem("email", res.email);
           console.log(res.token);
           toggleInfoTooltipSuccessLoginState();
           setIsLoggedIn(true);
@@ -262,7 +259,7 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
         <div className="page">
-          <Header email={email} onLogout={onLogout} />
+          <Header email={currentUser.email} onLogout={onLogout} />
           <Switch>
             <ProtectedRoute exact path='/' loggedIn={isLoggedIn} redirectedPath='/signin'>
               <Main

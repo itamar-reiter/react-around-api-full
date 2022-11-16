@@ -1,12 +1,17 @@
 // const { Types } = require('mongoose');
 const Cards = require('../models/card');
-const {NotFoundError, InvalidDataError, ServerError, NOT_FOUND_ERROR_CODE} = require('../utils/errors');
+const { NotFoundError, InvalidDataError, ServerError, NOT_FOUND_ERROR_CODE } = require('../utils/errors');
 
 const getCards = (req, res, next) => Cards.find({})
-  .then((cards) => res.status(200).send(cards))
+  .then((cards) => {
+    console.log(cards);
+    console.log(res);
+    res.status(200).send(cards);
+    console.log(res);
+  })
   .catch(next);
 
-const createCard = (req, res ,next) => {
+const createCard = (req, res, next) => {
   const owner = req.user._id;
   const { name, link } = req.body;
   Cards.create({ name, link, owner })
@@ -24,7 +29,7 @@ const createCard = (req, res ,next) => {
 };
 
 //TODO - only card owner should be able to delete the card
-const deleteCard = (req, res ,next) => {
+const deleteCard = (req, res, next) => {
   const id = req.params.cardId;
   Cards.findByIdAndRemove(id)
     .orFail(() => {
@@ -62,7 +67,7 @@ const toggleCardLike = (req, res, next, isLike) => {
       if (error.name === 'CastError') {
         next(new InvalidDataError('invalid user id'));
       } else if (error.name === 'DocumentNotFoundError') {
-       next(new NotFoundError('Card not found'));
+        next(new NotFoundError('Card not found'));
       } else {
         next(new ServerError());
       }
