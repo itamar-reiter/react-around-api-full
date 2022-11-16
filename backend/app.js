@@ -49,10 +49,10 @@ app.use(authMiddleware);
 
 //routes for users and cards
 app.use('/', usersRouter);
-app.use('/', errorRouter);
+app.use('/', cardsRouter);
 
 // cards route for the specific user
-app.use('/', cardsRouter);
+app.use('/', errorRouter);
 app.use(errorLogger);
 app.use(errors());
 app.use(errorMiddleware);
