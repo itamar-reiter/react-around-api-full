@@ -31,8 +31,8 @@ const createCard = (req, res, next) => {
 
 //TODO - only card owner should be able to delete the card
 const deleteCard = (req, res, next) => {
-  const id = req.params.cardId;
-  Cards.findByIdAndRemove(id)
+  const cardId = req.params;
+  Cards.findByIdAndRemove(cardId)
     .orFail(() => {
       throw new NotFoundError(`not found card with ${id} id`);
     })
@@ -55,7 +55,7 @@ const deleteCard = (req, res, next) => {
 
 const toggleCardLike = (req, res, next, isLike) => {
   const id = req.user._id;
-  const cardId = req.params.cardId;
+  const cardId = req.params;
   const method = isLike ? { $addToSet: { likes: id } } : { $pull: { likes: id } };
   Cards.findByIdAndUpdate(
     cardId,
