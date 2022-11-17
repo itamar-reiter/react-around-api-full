@@ -55,7 +55,7 @@ const deleteCard = (req, res, next) => {
 
 const toggleCardLike = (req, res, next, isLike) => {
   const id = req.user._id;
-  const cardId = req.params;
+  const cardId = req.params.cardId;
   console.log(cardId);
   const method = isLike ? { $addToSet: { likes: id } } : { $pull: { likes: id } };
   Cards.findOneAndUpdate(

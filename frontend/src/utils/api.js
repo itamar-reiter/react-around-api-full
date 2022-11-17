@@ -92,7 +92,7 @@ class Api {
 
   putLike(cardId, token) {
     return fetch(
-      `${this._baseUrl}/cards/likes/${cardId}`,
+      `${this._baseUrl}/cards/${cardId}/likes`,
       {
         method: "PUT",
         headers: {
@@ -106,7 +106,7 @@ class Api {
 
   deleteLike(cardId, token) {
     return fetch(
-      `${this._baseUrl}/cards/likes/${cardId}`,
+      `${this._baseUrl}/cards/${cardId}/likes`,
       {
         method: "DELETE",
         headers: {
