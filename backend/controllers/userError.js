@@ -1,5 +1,7 @@
-const getUserError = (req, res) => {
-  res.status(404).send({ message: 'Requested resource not found' });
+const { NotFoundError } = require("../utils/errors");
+
+const getUserError = (req, res, next) => {
+  next(new NotFoundError('Requested resource not found'));
 };
 
 module.exports = getUserError;
