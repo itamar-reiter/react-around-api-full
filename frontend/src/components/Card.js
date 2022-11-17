@@ -8,7 +8,7 @@ export default function Card({ card, onCardClick, onCardDelete, onCardLike }) {
   };
 
   // Checking if the current user is the owner of the current card
-  const isOwn = card.owner._id === currentUserValue._id;
+  const isOwn = card.owner === currentUserValue._id;
 
   // Creating a variable which you'll then set in `className` for the delete button
   const cardGarbageButtonClassName = `element__garbage-button ${
@@ -16,7 +16,7 @@ export default function Card({ card, onCardClick, onCardDelete, onCardLike }) {
   }`;
 
   // Check if the card was liked by the current user
-  const isLiked = card.likes.some((user) => user._id === currentUserValue._id);
+  const isLiked = card.likes.some((userId) => userId === currentUserValue._id);
 
   // Create a variable which you then set in `className` for the like button
   const elementLikeButtonClassName = `element__like-button ${
