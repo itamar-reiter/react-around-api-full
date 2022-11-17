@@ -2,6 +2,7 @@ const INVALID_DATA_ERROR_CODE = 400;
 const UNAUTHENTICATED_ERROR_ERROR_CODE = 401;
 const UNAUTHORIZED_ERROR_ERROR_CODE = 403;
 const NOT_FOUND_ERROR_CODE = 404;
+const CONFLICT_ERROR_ERROR_CODE = 409;
 
 class InvalidDataError extends Error {
   constructor(message) {
@@ -31,6 +32,13 @@ class NotFoundError extends Error {
   }
 }
 
+class ConflictError extends Error {
+  constructor(message) {
+    super(message);
+    this.statusCode = CONFLICT_ERROR_ERROR_CODE;
+  }
+}
+
 class ServerError extends Error {
   constructor() {
     this.message = 'An error has occured on the server';
@@ -41,5 +49,5 @@ class ServerError extends Error {
 //message: 'An error has occured on the server'
 
 module.exports = {
-  NotFoundError, UnauthenticatedError, UnauthorizedError, InvalidDataError, ServerError, INVALID_DATA_ERROR_CODE, NOT_FOUND_ERROR_CODE,
+  NotFoundError, UnauthenticatedError, UnauthorizedError, InvalidDataError, ServerError, ConflictError, INVALID_DATA_ERROR_CODE, NOT_FOUND_ERROR_CODE,
 };

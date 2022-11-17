@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { NODE_ENV, JWT_SECRET } = process.env;
 const {
-  NotFoundError, InvalidDataError, ServerError, INVALID_DATA_ERROR_CODE, NOT_FOUND_ERROR_CODE, userUpdateError, UnauthenticatedError, UNAUTHENTICATED_ERROR_ERROR_CODE
+  NotFoundError, InvalidDataError, ServerError, ConflictError, NOT_FOUND_ERROR_CODE, UnauthenticatedError, UNAUTHENTICATED_ERROR_ERROR_CODE
 } = require('../utils/errors');
 
 
@@ -132,8 +132,11 @@ const createUser = (req, res, next) => {
     .catch((error) => {
       console.log(error);
       //TODO handling case when creating duplicate user and the app crash (mongooseError 'duplicate key error')
-      if (error.name === 'ValidationError' || error.name === 'TypeError') {
+      if (error.name === 'ValidationError') {
         next(new InvalidDataError('Invalid email url or password. an item is missing.'));
+      }
+      else if (error.name === 'TypeError'){
+next(new ConflictError("There's allready a user with that email adress. please put another email"))
       } else {
         next(error);
       }
