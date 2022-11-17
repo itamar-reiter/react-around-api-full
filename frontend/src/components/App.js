@@ -60,6 +60,7 @@ function App() {
       api.getInitialCards(token)
         .then((cardsData) => {
           setCards(cardsData);
+          console.log(cards);
         })
         .catch((err) => {
           console.log(err);
