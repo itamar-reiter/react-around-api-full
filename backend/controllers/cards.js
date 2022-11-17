@@ -1,6 +1,6 @@
 // const { Types } = require('mongoose');
 const Cards = require('../models/card');
-const { NotFoundError, InvalidDataError, ServerError, NOT_FOUND_ERROR_CODE } = require('../utils/errors');
+const { NotFoundError, InvalidDataError, ServerError, NOT_FOUND_ERROR_CODE, UnauthorizedError } = require('../utils/errors');
 
 const getCards = (req, res, next) => Cards.find({})
   .then((cards) => {
@@ -28,14 +28,18 @@ const createCard = (req, res, next) => {
 //TODO - only card owner should be able to delete the card
 const deleteCard = (req, res, next) => {
   const cardId = req.params.cardId;
-  Cards.findOneAndRemove({_id: cardId})
+  Cards.findOne({ _id: cardId })
     .orFail(() => {
       throw new NotFoundError(`not found card with ${id} id`);
     })
     .then((card) => {
-      if (card) {
-        res.status(200).send(card);
+      if (card.owner.equals(req.user._id)) {
+        return next(new UnauthorizedError("You can't delete this card"));
       }
+      return card.remove()
+        .then(() =>
+          res.status(200).send({message: "card has been deleted"})
+        )
     })
     .catch((error) => {
       console.log(error);
@@ -54,7 +58,7 @@ const toggleCardLike = (req, res, next, isLike) => {
   const cardId = req.params.cardId;
   const method = isLike ? { $addToSet: { likes: id } } : { $pull: { likes: id } };
   Cards.findOneAndUpdate(
-    {_id: cardId},
+    { _id: cardId },
     method,
     { new: true },
   )
