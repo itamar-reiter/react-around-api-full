@@ -33,7 +33,7 @@ const deleteCard = (req, res, next) => {
       throw new NotFoundError(`not found card with ${id} id`);
     })
     .then((card) => {
-      if (card.owner.equals(req.user._id)) {
+      if (!card.owner.equals(req.user._id)) {
         return next(new UnauthorizedError("You can't delete this card"));
       }
       return card.remove()
