@@ -1,8 +1,3 @@
-/* ProtectedRoute - 24:00*/
-/* auth - 34:10 */
-/* App - 37:15 */
-
-
 import React, { useState, useEffect } from "react";
 import Footer from "./Footer";
 import Header from "./Header";
@@ -60,7 +55,6 @@ function App() {
       api.getInitialCards(token)
         .then((cardsData) => {
           setCards(cardsData);
-          console.log(cards);
         })
         .catch((err) => {
           console.log(err);
@@ -71,7 +65,6 @@ function App() {
   const onRegister = (email, password) => {
     auth.register(email, password)
       .then((res) => {
-        console.log(res);
         if (res._id) {
           toggleInfoTooltipSuccessRegisterationState();
           history.push('/signin');
@@ -89,11 +82,9 @@ function App() {
     auth.login(email, password)
       .then((res => {
         if (res.token) {
-          console.log(res);
           localStorage.setItem("jwt", res.token);
           setToken(localStorage.getItem("jwt"));
           localStorage.setItem("email", res.email);
-          console.log(res.token);
           toggleInfoTooltipSuccessLoginState();
           setIsLoggedIn(true);
           history.push("/");
@@ -113,7 +104,6 @@ function App() {
   function handleCardLike(card) {
     // Check one more time if this card was already liked
     const isLiked = card.likes.some((userId) => userId === currentUser._id);
-    console.log(isLiked);
 
     // Send a request to the API and getting the updated card data
     api.changeLikeCardStatus(card._id, !isLiked, token)
@@ -144,9 +134,7 @@ function App() {
 
   //hook for auth if logged in
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  //TODELETE 
 
-  /* setIsLoggedIn(true); */
   //hooks for opening the popups
 
   const [isInfoTooltipSuccessRegisterationOpen, setIsInfoTooltipSuccessRegisterationOpen] = useState(false);
@@ -235,7 +223,6 @@ function App() {
   };
 
   const onLogout = () => {
-    console.log("onLogout is on");
     localStorage.removeItem("jwt");
     setIsLoggedIn(false);
   }

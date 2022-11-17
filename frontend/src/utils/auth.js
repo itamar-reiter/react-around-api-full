@@ -29,7 +29,7 @@ class Auth {
 
   login(email, password) {
     return fetch(`${this._serverAdress}/signin`, {
-      method: "POST", /* whyyyy? */
+      method: "POST", 
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",

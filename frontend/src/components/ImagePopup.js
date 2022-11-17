@@ -8,7 +8,6 @@ export default function ImagePopup({ card, isPopupOpen, onClose }) {
   };
 
   const handleEscClose = (evt) => {
-    console.log("escEvt pressed");
     if (evt.key === "Escape") {
       onClose();
     }
