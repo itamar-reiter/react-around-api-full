@@ -126,8 +126,8 @@ const createUser = (req, res, next) => {
   bcrypt.hash(req.body.password, 10)
     .then(hash => Users.create({ email: req.body.email, password: hash }))
     //TODO returning the user without the hashed password
-    .then((user) => {
-      res.status(200).send(user);
+    .then(() => {
+      res.status(200).send({message: "user created successfully"});
     })
     .catch((error) => {
       console.log(error);
