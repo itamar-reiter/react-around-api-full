@@ -35,7 +35,6 @@ function App() {
       auth.checkToken(token)
         .then((res) => {
           if (res) {
-            setCurrentUser(res);
             setIsLoggedIn(true);
             history.push('/');
           }
@@ -52,9 +51,12 @@ function App() {
   // get initial cards from the server
   useEffect(() => {
     if (token) {
-      api.getInitialCards(token)
-        .then((cardsData) => {
+      console.log(token);
+      api.getInitialAppInfo(token)
+        .then(([userInfo, cardsData]) => {
+          setCurrentUser(userInfo);
           setCards(cardsData);
+          console.log(cardsData);
         })
         .catch((err) => {
           console.log(err);
