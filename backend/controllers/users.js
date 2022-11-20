@@ -127,6 +127,7 @@ const createUser = (req, res, next) => {
     .then(hash => Users.create({ email: req.body.email, password: hash }))
     //TODO returning the user without the hashed password
     .then((user) => {
+      console.log(user);
       res.status(200).send(user);
     })
     .catch((error) => {
@@ -135,7 +136,7 @@ const createUser = (req, res, next) => {
       if (error.name === 'ValidationError') {
         next(new InvalidDataError('Invalid email url or password. an item is missing.'));
       }
-      else if (error.name === 'TypeError'){
+      else if (error.name === 'MongoServerError'){
 next(new ConflictError("There's allready a user with that email adress. please put another email"))
       } else {
         next(error);

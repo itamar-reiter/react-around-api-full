@@ -42,7 +42,6 @@ const userSchema = new Schema({
     type: String,
     required: true,
     select: false,
-    minlength: 8,
   }
 });
 
