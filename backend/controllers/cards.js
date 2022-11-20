@@ -1,6 +1,10 @@
 // const { Types } = require('mongoose');
 const Cards = require('../models/card');
-const { NotFoundError, InvalidDataError, ServerError, NOT_FOUND_ERROR_CODE, UnauthorizedError } = require('../utils/errors');
+const { NOT_FOUND_ERROR_CODE } = require('../utils/errorCodes');
+const {UnauthorizedError} = require('../utils/errors/UnauthorizedError');
+const {InvalidDataError} = require('../utils/errors/InvalidDataError');
+const {NotFoundError} = require('../utils/errors/NotFoundError');
+const {ServerError} = require('../utils/errors/ServerError');
 
 const getCards = (req, res, next) => Cards.find({})
   .then((cards) => {
@@ -38,7 +42,7 @@ const deleteCard = (req, res, next) => {
       }
       return card.remove()
         .then(() =>
-          res.status(200).send({message: "card has been deleted"})
+          res.status(200).send({ message: "card has been deleted" })
         )
     })
     .catch((error) => {

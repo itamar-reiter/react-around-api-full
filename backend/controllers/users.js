@@ -3,8 +3,13 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { NODE_ENV, JWT_SECRET } = process.env;
 const {
-  NotFoundError, InvalidDataError, ServerError, ConflictError, NOT_FOUND_ERROR_CODE, UnauthenticatedError, UNAUTHENTICATED_ERROR_ERROR_CODE
-} = require('../utils/errors');
+ NOT_FOUND_ERROR_CODE, UNAUTHENTICATED_ERROR_ERROR_CODE
+} = require('../utils/errorCodes');
+const {UnauthenticatedError} = require('../utils/errors/UnauthenticatedError');
+const {NotFoundError} = require('../utils/errors/NotFoundError');
+const {InvalidDataError} = require('../utils/errors/InvalidDataError');
+const {ServerError} = require('../utils/errors/ServerError');
+const ConflictError = require('../utils/errors/ConflictError');
 
 
 const login = (req, res, next) => {
@@ -14,7 +19,7 @@ const login = (req, res, next) => {
     .then(user => {
       const token = jwt.sign({ _id: user._id },
         NODE_ENV === 'production' ? JWT_SECRET : 'not-so-secret-string');
-      res.send({ token: token});
+      res.send({ token: token });
     })
     .catch((error) => {
       console.log(error);
@@ -136,8 +141,8 @@ const createUser = (req, res, next) => {
       if (error.name === 'ValidationError') {
         next(new InvalidDataError('Invalid email url or password. an item is missing.'));
       }
-      else if (error.name === 'MongoServerError'){
-next(new ConflictError("There's allready a user with that email adress. please put another email"))
+      else if (error.name === 'MongoServerError') {
+        next(new ConflictError("There's allready a user with that email adress. please put another email"))
       } else {
         next(error);
       }

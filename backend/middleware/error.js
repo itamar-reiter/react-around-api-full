@@ -1,9 +1,9 @@
 const {
   INVALID_DATA_ERROR_CODE, NOT_FOUND_ERROR_CODE
-} = require('../utils/errors');
+} = require('../utils/errorCodes');
 
 module.exports = (err, req, res, next) => {
-  
+
   console.log("in error middleware");
   console.log(err.message);
   const { statusCode = 500, message } = err;

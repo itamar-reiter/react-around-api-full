@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-const { UnauthenticatedError } = require('../utils/errors');
+const { UnauthenticatedError } = require('../utils/errors/UnauthenticatedError');
 
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
