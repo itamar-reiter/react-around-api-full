@@ -1,18 +1,25 @@
 const { celebrate, Joi } = require('celebrate');
-const {urlRegex} = require('../utils/regex');
+const { urlRegex } = require('../utils/regex');
 
 //TODELETE??
- /* const validateUrl = (value, helpers) => {
-  if (isURL(value)) {
-    return value;
-  }
-  return helpers.error('string.uri');
+/* const validateUrl = (value, helpers) => {
+ if (isURL(value)) {
+   return value;
+ }
+ return helpers.error('string.uri');
 } */
 
 //cards validators
 
 //TODO fix url validation
 //TODO fix "Requested resource not found" error that comes across all requests
+
+const emailAndPasswordValidator = celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().email().required().unique(),
+    password: Joi.string().required()
+  })
+});
 
 const createCardValidator = celebrate({
   body: Joi.object().keys({
@@ -63,5 +70,5 @@ const updateAvatarValidator = celebrate({
 
 
 module.exports = {
-  createCardValidator, cardIdValidator, getUserDataValidator, getUserByIdValidator, updateProfileValidator, updateAvatarValidator
+  emailAndPasswordValidator, createCardValidator, cardIdValidator, getUserDataValidator, getUserByIdValidator, updateProfileValidator, updateAvatarValidator
 }

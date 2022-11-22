@@ -1,4 +1,4 @@
-const {NotFoundError} = require('../utils/errors/NotFoundError');
+const NotFoundError = require('../utils/errors/NotFoundError');
 
 const getUserError = (req, res, next) => {
   next(new NotFoundError('Requested resource not found'));

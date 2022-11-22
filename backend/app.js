@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-const {errors} = require('celebrate');
+const { errors } = require('celebrate');
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -9,8 +9,9 @@ const errorMiddleware = require('./middleware/error');
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
 const errorRouter = require('./routes/userError');
-const {login, createUser} = require('./controllers/users');
+const { login, createUser } = require('./controllers/users');
 const { requestLogger, errorLogger } = require('./middleware/logger');
+const { emailAndPasswordValidator } = require('./middleware/celebrateValidators');
 // listen to port 3000
 const { PORT = 3000 } = process.env;
 
@@ -36,10 +37,10 @@ app.get('/crash-test', () => {
 });
 
 //login
-app.post('/signin', login);
+app.post('/signin', emailAndPasswordValidator, login);
 
 //signup
-app.post('/signup', createUser);
+app.post('/signup', emailAndPasswordValidator, createUser);
 
 //use auth middleware only for protected routes
 app.use(authMiddleware);

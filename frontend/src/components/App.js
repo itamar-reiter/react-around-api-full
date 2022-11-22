@@ -67,6 +67,7 @@ function App() {
   const onRegister = (email, password) => {
     auth.register(email, password)
       .then((res) => {
+        console.log(res);
         if (res._id) {
           toggleInfoTooltipSuccessRegisterationState();
           history.push('/signin');
