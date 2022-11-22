@@ -16,7 +16,7 @@ const { urlRegex } = require('../utils/regex');
 
 const emailAndPasswordValidator = celebrate({
   body: Joi.object().keys({
-    email: Joi.string().required().unique().email(),
+    email: Joi.string().required().unique(true).email(true),
     password: Joi.string().required()
   })
 });
