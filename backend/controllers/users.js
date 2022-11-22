@@ -133,9 +133,9 @@ const createUser = (req, res, next) => {
     //TODO returning the user without the hashed password
     .then((user) => {
       const {password, ...restProps} = user;
-      user = restProps;
-      console.log(user);
-      res.status(200).send(user);
+      const newUser = restProps;
+      console.log(newUser);
+      res.status(200).send(newUser);
     })
     .catch((error) => {
       console.log(error);
