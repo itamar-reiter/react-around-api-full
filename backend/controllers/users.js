@@ -132,9 +132,9 @@ const createUser = (req, res, next) => {
     .then(hash => Users.create({ email: req.body.email, password: hash }))
     //TODO returning the user without the hashed password
     .then((user) => {
-      console.log(user);
       console.log(user.password);
-      delete user.password;
+      delete user["password"];
+      console.log(user);
       res.status(200).send(user);
     })
     .catch((error) => {
