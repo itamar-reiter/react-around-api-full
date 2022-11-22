@@ -3,12 +3,12 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { NODE_ENV, JWT_SECRET } = process.env;
 const {
- NOT_FOUND_ERROR_CODE, UNAUTHENTICATED_ERROR_ERROR_CODE
-} = require('../utils/errorCodes');
-const {UnauthenticatedError} = require('../utils/errors/UnauthenticatedError');
-const {NotFoundError} = require('../utils/errors/NotFoundError');
-const {InvalidDataError} = require('../utils/errors/InvalidDataError');
-const {ServerError} = require('../utils/errors/ServerError');
+  NOT_FOUND_ERROR_CODE, UNAUTHENTICATED_ERROR_ERROR_CODE
+} = require('../utils/errors/errorCodes');
+const UnauthenticatedError = require('../utils/errors/UnauthenticatedError');
+const NotFoundError = require('../utils/errors/NotFoundError');
+const InvalidDataError = require('../utils/errors/InvalidDataError');
+const ServerError = require('../utils/errors/ServerError');
 const ConflictError = require('../utils/errors/ConflictError');
 
 
@@ -132,9 +132,7 @@ const createUser = (req, res, next) => {
     .then(hash => Users.create({ email: req.body.email, password: hash }))
     //TODO returning the user without the hashed password
     .then((user) => {
-      console.log(user._doc.password);
       delete user._doc.password;
-      console.log(user);
       res.status(200).send(user);
     })
     .catch((error) => {

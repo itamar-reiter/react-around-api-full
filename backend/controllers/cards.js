@@ -1,10 +1,10 @@
 // const { Types } = require('mongoose');
 const Cards = require('../models/card');
-const { NOT_FOUND_ERROR_CODE } = require('../utils/errorCodes');
-const {UnauthorizedError} = require('../utils/errors/UnauthorizedError');
-const {InvalidDataError} = require('../utils/errors/InvalidDataError');
-const {NotFoundError} = require('../utils/errors/NotFoundError');
-const {ServerError} = require('../utils/errors/ServerError');
+const { NOT_FOUND_ERROR_CODE } = require('../utils/errors/errorCodes');
+const UnauthorizedError = require('../utils/errors/UnauthorizedError');
+const InvalidDataError = require('../utils/errors/InvalidDataError');
+const NotFoundError = require('../utils/errors/NotFoundError');
+const ServerError = require('../utils/errors/ServerError');
 
 const getCards = (req, res, next) => Cards.find({})
   .then((cards) => {

@@ -1,4 +1,4 @@
-const { INVALID_DATA_ERROR_CODE } = require("../errorCodes");
+const { INVALID_DATA_ERROR_CODE } = require("./errorCodes");
 
 
 module.exports = class InvalidDataError extends Error {

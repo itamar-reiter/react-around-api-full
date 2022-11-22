@@ -1,4 +1,4 @@
-const { CONFLICT_ERROR_ERROR_CODE } = require("../errorCodes");
+const { CONFLICT_ERROR_ERROR_CODE } = require("./errorCodes");
 
 module.exports = class ConflictError extends Error {
   constructor(message) {

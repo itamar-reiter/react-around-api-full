@@ -1,4 +1,4 @@
-const { NOT_FOUND_ERROR_CODE } = require("../errorCodes");
+const { NOT_FOUND_ERROR_CODE } = require("./errorCodes");
 
 module.exports = class NotFoundError extends Error {
   constructor(message) {

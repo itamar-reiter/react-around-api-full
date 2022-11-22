@@ -1,6 +1,6 @@
 const {
   INVALID_DATA_ERROR_CODE, NOT_FOUND_ERROR_CODE
-} = require('../utils/errorCodes');
+} = require('../utils/errors/errorCodes');
 
 module.exports = (err, req, res, next) => {
 
