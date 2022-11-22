@@ -51,12 +51,10 @@ function App() {
   // get initial cards from the server
   useEffect(() => {
     if (token) {
-      console.log(token);
       api.getInitialAppInfo(token)
         .then(([userInfo, cardsData]) => {
           setCurrentUser(userInfo);
           setCards(cardsData);
-          console.log(cardsData);
         })
         .catch((err) => {
           console.log(err);
@@ -67,7 +65,6 @@ function App() {
   const onRegister = (email, password) => {
     auth.register(email, password)
       .then((res) => {
-        console.log(res);
         if (res._id) {
           toggleInfoTooltipSuccessRegisterationState();
           history.push('/signin');
