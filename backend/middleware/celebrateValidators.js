@@ -25,7 +25,7 @@ const registerValidator = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required(),
     password: Joi.string().required(),
-    name: Joi.string().min(2).max(30).default("Jaci jaqqu Cousteau"),
+    name: Joi.string().min(2).max(30).default("Jacques Cousteau"),
     about: Joi.string().min(2).max(30).default("Explorer"),
     avatar: Joi.string().pattern(urlRegex).default("https://pictures.s3.yandex.net/resources/avatar_1604080799.jpg"),
   })
