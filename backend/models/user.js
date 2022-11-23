@@ -1,25 +1,25 @@
 const { Schema, model } = require('mongoose');
-const { urlRegex } = require('../utils/regex');
-const UnauthenticatedError = require('../utils/errors/UnauthenticatedError');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
+const { urlRegex } = require('../utils/regex');
+const UnauthenticatedError = require('../utils/errors/UnauthenticatedError');
 
 const userSchema = new Schema({
   name: {
     type: String,
-    default: "Jacques Cousteau",
+    default: 'Jacques Cousteau',
     minLength: 2,
     maxLength: 30,
   },
   about: {
     type: String,
-    default: "Explorer",
+    default: 'Explorer',
     minLength: 2,
     maxLength: 30,
   },
   avatar: {
     type: String,
-    default: "https://pictures.s3.yandex.net/resources/avatar_1604080799.jpg",
+    default: 'https://pictures.s3.yandex.net/resources/avatar_1604080799.jpg',
     validate: {
       validator(v) {
         return urlRegex.test(v);
@@ -36,29 +36,29 @@ const userSchema = new Schema({
         return validator.isEmail(v);
       },
       message: (props) => `${props.value} is not a valid email.`,
-    }
+    },
   },
   password: {
     type: String,
     required: true,
     select: false,
-  }
+  },
 });
 
 userSchema.statics.findUserByCredentials = function findUserByCredentials(email, password) {
-  return this.findOne({ email: email }).select('+password')
-    .then(user => {
+  return this.findOne({ email }).select('+password')
+    .then((user) => {
       if (!user) {
         return Promise.reject(new UnauthenticatedError('Email or Password are incorrect'));
       }
       return bcrypt.compare(password, user.password)
-        .then(matched => {
+        .then((matched) => {
           if (!matched) {
             return Promise.reject(new UnauthenticatedError('bad cred'));
           }
           return user;
-        })
+        });
     });
-}
+};
 
 module.exports = model('user', userSchema);

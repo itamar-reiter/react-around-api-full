@@ -1,5 +1,4 @@
 const { Schema, model } = require('mongoose');
-const validator = require('validator');
 const { urlRegex } = require('../utils/regex');
 
 const cardSchema = new Schema({

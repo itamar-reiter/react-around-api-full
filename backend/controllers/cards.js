@@ -1,4 +1,4 @@
-// const { Types } = require('mongoose');
+/* eslint-disable no-console */
 const Cards = require('../models/card');
 const { NOT_FOUND_ERROR_CODE } = require('../utils/errors/errorCodes');
 const UnauthorizedError = require('../utils/errors/UnauthorizedError');
@@ -15,7 +15,7 @@ const getCards = (req, res, next) => Cards.find({})
 const createCard = (req, res, next) => {
   const owner = req.user._id;
   const { name, link } = req.body;
-  Cards.create({ name: name, link: link, owner: owner })
+  Cards.create({ name, link, owner })
     .then((card) => {
       res.status(200).send(card);
     })
@@ -29,9 +29,9 @@ const createCard = (req, res, next) => {
     });
 };
 
-//TODO - only card owner should be able to delete the card
+// TODO - only card owner should be able to delete the card
 const deleteCard = (req, res, next) => {
-  const cardId = req.params.cardId;
+  const { cardId } = req.params;
   Cards.findOne({ _id: cardId })
     .orFail(() => {
       throw new NotFoundError(`not found card with ${cardId} id`);
@@ -41,9 +41,7 @@ const deleteCard = (req, res, next) => {
         return next(new UnauthorizedError("You can't delete this card"));
       }
       return card.remove()
-        .then(() =>
-          res.status(200).send({ message: "card has been deleted" })
-        )
+        .then(() => res.status(200).send({ message: 'card has been deleted' }));
     })
     .catch((error) => {
       console.log(error);
@@ -59,7 +57,7 @@ const deleteCard = (req, res, next) => {
 
 const toggleCardLike = (req, res, next, isLike) => {
   const id = req.user._id;
-  const cardId = req.params.cardId;
+  const { cardId } = req.params;
   const method = isLike ? { $addToSet: { likes: id } } : { $pull: { likes: id } };
   Cards.findOneAndUpdate(
     { _id: cardId },

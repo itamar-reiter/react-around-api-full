@@ -1,7 +1,7 @@
 const { celebrate, Joi } = require('celebrate');
 const { urlRegex } = require('../utils/regex');
 
-//TODELETE??
+// TODELETE??
 /* const validateUrl = (value, helpers) => {
  if (isURL(value)) {
    return value;
@@ -9,76 +9,79 @@ const { urlRegex } = require('../utils/regex');
  return helpers.error('string.uri');
 } */
 
-//cards validators
+// cards validators
 
-//TODO fix url validation
-//TODO fix "Requested resource not found" error that comes across all requests
+// TODO fix url validation
+// TODO fix "Requested resource not found" error that comes across all requests
 
 const loginValidator = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required(),
-    password: Joi.string().required()
-  })
+    password: Joi.string().required(),
+  }),
 });
 
 const registerValidator = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required(),
     password: Joi.string().required(),
-    name: Joi.string().min(2).max(30).default("Jacques Cousteau"),
-    about: Joi.string().min(2).max(30).default("Explorer"),
-    avatar: Joi.string().pattern(urlRegex).default("https://pictures.s3.yandex.net/resources/avatar_1604080799.jpg"),
-  })
+    name: Joi.string().min(2).max(30).default('Jacques Cousteau'),
+    about: Joi.string().min(2).max(30).default('Explorer'),
+    avatar: Joi.string().pattern(urlRegex).default('https://pictures.s3.yandex.net/resources/avatar_1604080799.jpg'),
+  }),
 });
 
 const createCardValidator = celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
-    link: Joi.string().required().pattern(urlRegex)
-  })
+    link: Joi.string().required().pattern(urlRegex),
+  }),
 });
 
-//mongoose default id
+// mongoose default id
 
 const mongooseDefaultIdValidator = Joi.string().alphanum().length(24);
 
 const cardIdValidator = celebrate({
   params: Joi.object().keys({
-    cardId: mongooseDefaultIdValidator
-  })
-})
+    cardId: mongooseDefaultIdValidator,
+  }),
+});
 
-
-//users validators
+// users validators
 
 const getUserDataValidator = celebrate({
   body: Joi.object().keys({
-    id: mongooseDefaultIdValidator
-  })
+    id: mongooseDefaultIdValidator,
+  }),
 });
 
 const getUserByIdValidator = celebrate({
   params: Joi.object().keys({
-    id: mongooseDefaultIdValidator
-  })
+    id: mongooseDefaultIdValidator,
+  }),
 });
 
 const updateProfileValidator = celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
-    about: Joi.string().required().min(2).max(30)
-  })
+    about: Joi.string().required().min(2).max(30),
+  }),
 });
 
 const updateAvatarValidator = celebrate({
   body: Joi.object().keys({
-    avatar: Joi.string().required().pattern(urlRegex)
-  })
+    avatar: Joi.string().required().pattern(urlRegex),
+  }),
 });
 
-
-
-
 module.exports = {
-  registerValidator, loginValidator, createCardValidator, cardIdValidator, getUserDataValidator, getUserByIdValidator, updateProfileValidator, updateAvatarValidator
-}
+  registerValidator,
+  loginValidator,
+  createCardValidator,
+  cardIdValidator,
+  getUserDataValidator,
+  getUserByIdValidator,
+  updateProfileValidator,
+  updateAvatarValidator,
+};

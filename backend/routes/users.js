@@ -10,7 +10,7 @@ const {
   getUserDataValidator,
   getUserByIdValidator,
   updateProfileValidator,
-  updateAvatarValidator
+  updateAvatarValidator,
 } = require('../middleware/celebrateValidators');
 
 usersRouter.get('/users', getUsers);

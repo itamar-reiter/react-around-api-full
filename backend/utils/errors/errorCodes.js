@@ -11,11 +11,7 @@ module.exports = {
   UNAUTHORIZED_ERROR_ERROR_CODE,
   NOT_FOUND_ERROR_CODE,
   CONFLICT_ERROR_ERROR_CODE,
-  SERVER_ERROR_ERROR_CODE
+  SERVER_ERROR_ERROR_CODE,
 };
 
-//message: 'An error has occured on the server'
-
-
-
-
+// message: 'An error has occured on the server'
