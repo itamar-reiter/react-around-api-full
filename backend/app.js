@@ -11,7 +11,7 @@ const cardsRouter = require('./routes/cards');
 const errorRouter = require('./routes/userError');
 const { login, createUser } = require('./controllers/users');
 const { requestLogger, errorLogger } = require('./middleware/logger');
-const { emailAndPasswordValidator } = require('./middleware/celebrateValidators');
+const { loginValidator, registerValidator } = require('./middleware/celebrateValidators');
 // listen to port 3000
 const { PORT = 3000 } = process.env;
 
@@ -37,10 +37,10 @@ app.get('/crash-test', () => {
 });
 
 //login
-app.post('/signin', emailAndPasswordValidator, login);
+app.post('/signin', loginValidator, login);
 
 //signup
-app.post('/signup', emailAndPasswordValidator, createUser);
+app.post('/signup', registerValidator, createUser);
 
 //use auth middleware only for protected routes
 app.use(authMiddleware);

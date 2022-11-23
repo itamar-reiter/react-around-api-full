@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 const { urlRegex } = require('../utils/regex');
-const { UnauthenticatedError } = require('../utils/errors/UnauthenticatedError');
+const UnauthenticatedError = require('../utils/errors/UnauthenticatedError');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 

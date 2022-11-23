@@ -14,10 +14,20 @@ const { urlRegex } = require('../utils/regex');
 //TODO fix url validation
 //TODO fix "Requested resource not found" error that comes across all requests
 
-const emailAndPasswordValidator = celebrate({
+const loginValidator = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required(),
     password: Joi.string().required()
+  })
+});
+
+const registerValidator = celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required(),
+    password: Joi.string().required(),
+    name: Joi.string().min(2).max(30).default("Jacques Cousteau"),
+    about: Joi.string().min(2).max(30).default("Explorer"),
+    avatar: Joi.string().pattern(urlRegex).default("https://pictures.s3.yandex.net/resources/avatar_1604080799.jpg"),
   })
 });
 
@@ -70,5 +80,5 @@ const updateAvatarValidator = celebrate({
 
 
 module.exports = {
-  emailAndPasswordValidator, createCardValidator, cardIdValidator, getUserDataValidator, getUserByIdValidator, updateProfileValidator, updateAvatarValidator
+  registerValidator, loginValidator, createCardValidator, cardIdValidator, getUserDataValidator, getUserByIdValidator, updateProfileValidator, updateAvatarValidator
 }

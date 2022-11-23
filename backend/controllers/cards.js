@@ -34,7 +34,7 @@ const deleteCard = (req, res, next) => {
   const cardId = req.params.cardId;
   Cards.findOne({ _id: cardId })
     .orFail(() => {
-      throw new NotFoundError(`not found card with ${id} id`);
+      throw new NotFoundError(`not found card with ${cardId} id`);
     })
     .then((card) => {
       if (!card.owner.equals(req.user._id)) {

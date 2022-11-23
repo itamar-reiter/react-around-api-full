@@ -18,7 +18,9 @@ const login = (req, res, next) => {
     //TODO make so the hashed password wont come back to the user
     .then(user => {
       const token = jwt.sign({ _id: user._id },
-        NODE_ENV === 'production' ? JWT_SECRET : 'not-so-secret-string');
+        NODE_ENV === 'production' ? JWT_SECRET : 'not-so-secret-string', {
+        expiresIn: "7d"
+      });
       res.send({ token: token });
     })
     .catch((error) => {
@@ -128,9 +130,12 @@ const updateAvatar = (req, res, next) => {
 };
 
 const createUser = (req, res, next) => {
-  bcrypt.hash(req.body.password, 10)
-    .then(hash => Users.create({ email: req.body.email, password: hash }))
-    //TODO returning the user without the hashed password
+  const {
+    name, about, avatar, email, password,
+  } = req.body;
+  bcrypt.hash(password, 10)
+    .then(hash =>
+      Users.create({ email, password: hash, name, about, avatar, }))
     .then((user) => {
       delete user._doc.password;
       res.status(200).send(user);
