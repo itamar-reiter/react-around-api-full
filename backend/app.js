@@ -18,7 +18,8 @@ const { PORT = 3000 } = process.env;
 mongoose.connect(process.env.DATABASE_ADRESS, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  // useFindAndModify: false
+  bufferCommands: false,
+  bufferTimeoutMS: 20000, // or a longer value
 });
 const app = express();
 
