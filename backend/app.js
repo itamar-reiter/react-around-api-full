@@ -15,7 +15,7 @@ const { loginValidator, registerValidator } = require('./middleware/celebrateVal
 // listen to port 3000
 const { PORT = 3000 } = process.env;
 
-mongoose.connect('mongodb://localhost:27017/aroundb', {
+mongoose.connect(process.env.DATABASE_ADRESS, {
   useNewUrlParser: true,
   // useCreateIndex: true,
   // useFindAndModify: false
